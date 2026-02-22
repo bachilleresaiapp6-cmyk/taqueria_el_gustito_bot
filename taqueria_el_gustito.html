@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>🌮 Taquería El Gustito - Pánuco, Ver.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #c92a2a 0%, #ff6b6b 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        /* SPLASH PAGE */
+        .splash-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(145deg, #c92a2a, #ff8c8c);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-container.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .splash-content {
+            text-align: center;
+            color: white;
+            max-width: 90%;
+            padding: 20px;
+            animation: aparecer 1.2s ease;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .splash-robot {
+            width: 120px;
+            height: 120px;
+            background: #ffd700;
+            border-radius: 60px 60px 40px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+            font-size: 4.5em;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            border: 4px solid white;
+            animation: robot-flotar 2s infinite ease-in-out;
+        }
+
+        @keyframes robot-flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .splash-title {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 5px;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .splash-subtitle {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .splash-mesero {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            margin: 25px 0 20px;
+            backdrop-filter: blur(5px);
+            border: 2px solid white;
+            display: inline-block;
+        }
+
+        .splash-barra {
+            width: 200px;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            margin: 25px auto 15px;
+            overflow: hidden;
+        }
+
+        .splash-progreso {
+            width: 0%;
+            height: 100%;
+            background: white;
+            animation: progreso 3s linear forwards;
+        }
+
+        @keyframes progreso { to { width: 100%; } }
+
+        /* Contenido principal */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .header h1 span { color: #c92a2a; }
+
+        .header p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+
+        .header i { color: #c92a2a; margin-right: 5px; }
+
+        .menu-section {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .menu-section h2 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #c92a2a;
+        }
+
+        .menu-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 5px 0 15px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .menu-scroll::-webkit-scrollbar { height: 4px; }
+        .menu-scroll::-webkit-scrollbar-thumb { background: #c92a2a; border-radius: 4px; }
+
+        .menu-card {
+            flex: 0 0 auto;
+            width: 160px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+
+        .menu-card h3 {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .menu-card p {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .menu-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .menu-precio {
+            color: #c92a2a;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .btn-agregar {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .chat-section {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .chat-section h2 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #c92a2a;
+        }
+
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #c92a2a;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            background: #f1f1f1;
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 0.95em;
+            outline: none;
+        }
+
+        .chat-input input:focus { border-color: #c92a2a; }
+
+        .chat-input button {
+            background: #c92a2a;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .order-section {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .order-section h2 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #c92a2a;
+        }
+
+        .order-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #eee;
+        }
+
+        .order-item-info { flex: 2; }
+        .order-item-name { font-weight: 600; color: #333; font-size: 0.95em; }
+        .order-item-price { color: #c92a2a; font-weight: bold; font-size: 0.9em; }
+
+        .order-item-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-item {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-menos { background: #ff6b6b; color: white; }
+        .btn-mas { background: #4CAF50; color: white; }
+        .btn-quitar { background: #c92a2a; color: white; width: 40px; }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-top: 2px solid #eee;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .order-total span { color: #c92a2a; font-size: 1.3em; }
+
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-accion {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-limpiar { background: #ff6b6b; color: white; }
+        .btn-pagar { background: #4CAF50; color: white; }
+
+        /* Modal de pago */
+        .modal-pago {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-pago.active {
+            display: flex;
+        }
+
+        .modal-contenido {
+            background: white;
+            border-radius: 30px;
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-titulo {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #c92a2a;
+            padding-bottom: 10px;
+        }
+
+        .opciones-pago {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .opcion-pago {
+            flex: 1;
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .opcion-pago.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .opcion-pago i {
+            font-size: 2.5em;
+            color: #c92a2a;
+            margin-bottom: 10px;
+        }
+
+        .opcion-pago span {
+            font-weight: bold;
+            display: block;
+        }
+
+        .info-transferencia {
+            background: #f1f9ff;
+            border: 2px dashed #2196F3;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .numero-cuenta {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2196F3;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .btn-whatsapp i { font-size: 1.5em; }
+
+        .btn-cerrar {
+            background: #c92a2a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .connection-status {
+            position: sticky;
+            top: 5px;
+            z-index: 1000;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            width: fit-content;
+            margin-left: auto;
+        }
+
+        .connected { background: #4CAF50; color: white; }
+        .disconnected { background: #c92a2a; color: white; }
+    </style>
+</head>
+<body>
+    <!-- SPLASH PAGE -->
+    <div id="splash" class="splash-container">
+        <div class="splash-content">
+            <div class="splash-robot">🤖</div>
+            <h1 class="splash-title">🌮 EL GUSTITO</h1>
+            <div class="splash-subtitle">PÁNUCO, VER.</div>
+            <div class="splash-mesero"><i class="fas fa-robot"></i> TOÑO · TU MESERO IA</div>
+            <p style="font-size: 1.1em; margin: 10px 0;">"¿Qué se te antoja hoy?"</p>
+            <div class="splash-barra"><div class="splash-progreso"></div></div>
+            <div class="splash-tocar"><i class="fas fa-hand-pointer"></i> Toca la pantalla</div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PAGO -->
+    <div id="modalPago" class="modal-pago">
+        <div class="modal-contenido">
+            <h2 class="modal-titulo">💳 Forma de Pago</h2>
+            
+            <div class="opciones-pago">
+                <div class="opcion-pago" id="opcionTransferencia" onclick="seleccionarPago('transferencia')">
+                    <i class="fas fa-university"></i>
+                    <span>Transferencia</span>
+                </div>
+                <div class="opcion-pago" id="opcionEfectivo" onclick="seleccionarPago('efectivo')">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Efectivo</span>
+                </div>
+            </div>
+
+            <div id="infoTransferencia" style="display: none;">
+                <div class="info-transferencia">
+                    <i class="fas fa-university" style="font-size: 2em; color: #2196F3;"></i>
+                    <h3 style="margin: 10px 0;">Datos para transferencia</h3>
+                    <p>Banco: BBVA México</p>
+                    <div class="numero-cuenta">4152 3130 4567 8910</div>
+                    <p>CLABE: 012 180 00123456789</p>
+                    <p style="color: #666; margin-top: 10px;">💡 Envía tu comprobante por WhatsApp</p>
+                </div>
+            </div>
+
+            <div id="infoEfectivo" style="display: none;">
+                <div class="info-transferencia" style="border-color: #4CAF50;">
+                    <i class="fas fa-money-bill-wave" style="font-size: 2em; color: #4CAF50;"></i>
+                    <h3 style="margin: 15px 0;">Pago en efectivo</h3>
+                    <p style="font-size: 2em; font-weight: bold; color: #4CAF50;" id="totalEfectivo">$0</p>
+                    <p>Paga al llegar tu pedido</p>
+                </div>
+            </div>
+
+            <button id="btnConfirmarWhatsApp" class="btn-whatsapp" onclick="enviarWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Confirmar pedido
+            </button>
+            <button class="btn-cerrar" onclick="cerrarModalPago()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container">
+        <div id="connectionStatus" class="connection-status disconnected">🔴 Conectando...</div>
+
+        <div class="header">
+            <h1>🌮 <span>El Gustito</span> 🌮</h1>
+            <p><i class="fas fa-map-marker-alt"></i> Pánuco, Veracruz</p>
+            <p><i class="fas fa-phone"></i> +52 833 289 2730</p>
+            <p><i class="fas fa-clock"></i> 6:00 PM - 2:00 AM</p>
+        </div>
+
+        <div class="menu-section">
+            <h2>📋 Menú</h2>
+            <div class="menu-scroll" id="menuScroll"></div>
+        </div>
+
+        <div class="chat-section">
+            <h2>💬 Pregúntale a Toño</h2>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">¡Hola! Soy Toño, tu mesero de El Gustito. ¿Qué se te antoja?</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Escribe aquí..." onkeypress="handleKeyPress(event)">
+                <button onclick="enviarMensaje()" id="sendButton">➤</button>
+            </div>
+        </div>
+
+        <div class="order-section">
+            <h2>🛒 Tu Orden</h2>
+            <div class="order-items" id="orderItems">
+                <p style="color: #999; text-align: center;">Aún no has agregado nada</p>
+            </div>
+            <div class="order-total">
+                <span>Total:</span>
+                <span id="orderTotal">$0</span>
+            </div>
+            <div class="order-actions">
+                <button class="btn-accion btn-limpiar" onclick="limpiarOrden()">🧹 Limpiar</button>
+                <button class="btn-accion btn-pagar" onclick="abrirModalPago()">💳 Pagar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+    
+    <script>
+        // ============================================
+        // VARIABLES GLOBALES
+        // ============================================
+        const API_URL = 'https://taqueria-el-gustito-bot.onrender.com';
+        const WHATSAPP_NUMBER = '522203709423'; // Número para confirmaciones
+        let orden = [];
+        let tipoPagoSeleccionado = '';
+
+        const menuItems = [
+            { nombre: 'Taco al Pastor', desc: 'Pastor, piña, cebolla', precio: 25 },
+            { nombre: 'Taco de Suadero', desc: 'Suadero, cebolla, cilantro', precio: 28 },
+            { nombre: 'Taco de Tripa', desc: 'Tripa crujiente', precio: 30 },
+            { nombre: 'Gringa de Pastor', desc: 'Harina, pastor, queso', precio: 45 },
+            { nombre: 'Quesadilla', desc: 'Queso Oaxaca', precio: 35 },
+            { nombre: 'Refresco', desc: 'Coca-Cola, Sprite, Fanta', precio: 25 },
+            { nombre: 'Cerveza', desc: 'Indio, XX, Corona', precio: 45 }
+        ];
+
+        // ============================================
+        // SPLASH PAGE
+        // ============================================
+        setTimeout(() => {
+            document.getElementById('splash').classList.add('hide');
+            document.body.style.overflow = 'auto';
+        }, 3500);
+
+        document.getElementById('splash').addEventListener('click', function() {
+            this.classList.add('hide');
+            document.body.style.overflow = 'auto';
+        });
+
+        // ============================================
+        // FUNCIONES DEL MENÚ
+        // ============================================
+        function cargarMenu() {
+            const menuScroll = document.getElementById('menuScroll');
+            menuScroll.innerHTML = '';
+            
+            menuItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                card.innerHTML = `
+                    <h3>${item.nombre}</h3>
+                    <p>${item.desc}</p>
+                    <div class="menu-card-footer">
+                        <span class="menu-precio">$${item.precio}</span>
+                        <button class="btn-agregar" onclick="agregarItem('${item.nombre}', ${item.precio})">+</button>
+                    </div>
+                `;
+                menuScroll.appendChild(card);
+            });
+        }
+
+        // ============================================
+        // FUNCIONES DE LA ORDEN
+        // ============================================
+        function agregarItem(nombre, precio) {
+            orden.push({ nombre, precio });
+            actualizarOrden();
+            agregarMensajeChat(`✅ Agregué ${nombre} a tu orden`, 'bot');
+        }
+
+        function disminuirItem(index) {
+            if (index >= 0 && index < orden.length) {
+                const item = orden[index];
+                orden.splice(index, 1);
+                actualizarOrden();
+                
+                const restantes = orden.filter(i => i.nombre === item.nombre).length;
+                if (restantes > 0) {
+                    agregarMensajeChat(`✅ Quité uno, ahora llevas ${restantes} ${item.nombre}`, 'bot');
+                } else {
+                    agregarMensajeChat(`❌ Quité todos los ${item.nombre}`, 'bot');
+                }
+            }
+        }
+
+        function aumentarItem(index) {
+            if (index >= 0 && index < orden.length) {
+                const item = orden[index];
+                orden.splice(index, 0, { nombre: item.nombre, precio: item.precio });
+                actualizarOrden();
+                
+                const cantidad = orden.filter(i => i.nombre === item.nombre).length;
+                agregarMensajeChat(`✅ Aumenté a ${cantidad} ${item.nombre}`, 'bot');
+            }
+        }
+
+        function quitarItemGrupo(nombre) {
+            const cantidad = orden.filter(i => i.nombre === nombre).length;
+            orden = orden.filter(item => item.nombre !== nombre);
+            actualizarOrden();
+            agregarMensajeChat(`❌ Quité ${cantidad} ${nombre} de tu orden`, 'bot');
+        }
+
+        function actualizarOrden() {
+            const orderDiv = document.getElementById('orderItems');
+            const totalSpan = document.getElementById('orderTotal');
+
+            if (orden.length === 0) {
+                orderDiv.innerHTML = '<p style="color: #999; text-align: center;">Aún no has agregado nada</p>';
+                totalSpan.textContent = '$0';
+                return;
+            }
+
+            const grupos = {};
+            orden.forEach((item, idx) => {
+                const key = item.nombre;
+                if (!grupos[key]) {
+                    grupos[key] = { nombre: item.nombre, precio: item.precio, cantidad: 0, indices: [] };
+                }
+                grupos[key].cantidad++;
+                grupos[key].indices.push(idx);
+            });
+
+            let html = '';
+            Object.values(grupos).forEach(grupo => {
+                const primerIndice = grupo.indices[0];
+                html += `
+                    <div class="order-item">
+                        <div class="order-item-info">
+                            <div class="order-item-name">${grupo.cantidad} x ${grupo.nombre}</div>
+                            <div class="order-item-price">$${grupo.precio * grupo.cantidad}</div>
+                        </div>
+                        <div class="order-item-actions">
+                            <button class="btn-item btn-menos" onclick="disminuirItem(${primerIndice})">−</button>
+                            <span style="font-weight: bold;">${grupo.cantidad}</span>
+                            <button class="btn-item btn-mas" onclick="aumentarItem(${primerIndice})">+</button>
+                            <button class="btn-item btn-quitar" onclick="quitarItemGrupo('${grupo.nombre}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            orderDiv.innerHTML = html;
+            const total = orden.reduce((sum, item) => sum + item.precio, 0);
+            totalSpan.textContent = `$${total}`;
+        }
+
+        function limpiarOrden() {
+            orden = [];
+            actualizarOrden();
+            agregarMensajeChat('🧹 Orden limpiada', 'bot');
+        }
+
+        // ============================================
+        // FUNCIONES DE PAGO
+        // ============================================
+        function abrirModalPago() {
+            if (orden.length === 0) {
+                alert('Agrega algo a tu orden primero');
+                return;
+            }
+            
+            document.getElementById('modalPago').classList.add('active');
+            document.getElementById('opcionTransferencia').classList.remove('selected');
+            document.getElementById('opcionEfectivo').classList.remove('selected');
+            document.getElementById('infoTransferencia').style.display = 'none';
+            document.getElementById('infoEfectivo').style.display = 'none';
+            document.getElementById('totalEfectivo').textContent = `$${orden.reduce((sum, item) => sum + item.precio, 0)}`;
+            tipoPagoSeleccionado = '';
+        }
+
+        function cerrarModalPago() {
+            document.getElementById('modalPago').classList.remove('active');
+        }
+
+        function seleccionarPago(tipo) {
+            tipoPagoSeleccionado = tipo;
+            
+            if (tipo === 'transferencia') {
+                document.getElementById('opcionTransferencia').classList.add('selected');
+                document.getElementById('opcionEfectivo').classList.remove('selected');
+                document.getElementById('infoTransferencia').style.display = 'block';
+                document.getElementById('infoEfectivo').style.display = 'none';
+            } else {
+                document.getElementById('opcionEfectivo').classList.add('selected');
+                document.getElementById('opcionTransferencia').classList.remove('selected');
+                document.getElementById('infoEfectivo').style.display = 'block';
+                document.getElementById('infoTransferencia').style.display = 'none';
+            }
+        }
+
+        function enviarWhatsApp() {
+            if (!tipoPagoSeleccionado) {
+                alert('Selecciona una forma de pago');
+                return;
+            }
+
+            const total = orden.reduce((sum, item) => sum + item.precio, 0);
+            const items = orden.map(i => `• ${i.nombre} - $${i.precio}`).join('\n');
+            
+            let mensaje = '';
+            
+            if (tipoPagoSeleccionado === 'transferencia') {
+                mensaje = `🍖 *NUEVA ORDEN - EL GUSTITO* 🍖\n\n`;
+                mensaje += `*FORMA DE PAGO:* Transferencia\n`;
+                mensaje += `*TOTAL:* $${total}\n\n`;
+                mensaje += `*ORDEN:*\n${items}\n\n`;
+                mensaje += `📌 *INSTRUCCIONES:*\n`;
+                mensaje += `1. Realiza la transferencia a:\n   BBVA: 4152 3130 4567 8910\n`;
+                mensaje += `2. Envía CAPTURA de la transferencia\n`;
+                mensaje += `3. Espera confirmación (2-3 min)\n\n`;
+                mensaje += `🕐 *Tiempo estimado:* 30-40 min`;
+            } else {
+                mensaje = `🍖 *NUEVA ORDEN - EL GUSTITO* 🍖\n\n`;
+                mensaje += `*FORMA DE PAGO:* Efectivo\n`;
+                mensaje += `*TOTAL A PAGAR:* $${total}\n\n`;
+                mensaje += `*ORDEN:*\n${items}\n\n`;
+                mensaje += `📌 *INSTRUCCIONES:*\n`;
+                mensaje += `• Prepara el monto exacto\n`;
+                mensaje += `• Paga al recibir tu pedido\n\n`;
+                mensaje += `🕐 *Tiempo estimado:* 30-40 min`;
+            }
+
+            mensaje += `\n\n📍 *Dirección:* Benito Juárez #123, Centro\n`;
+            mensaje += `📞 *Tel:* 833 289 2730\n\n`;
+            mensaje += `_Te confirmaremos tu orden en breve..._ 🏃‍♂️`;
+
+            // Codificar mensaje para URL
+            const mensajeCodificado = encodeURIComponent(mensaje);
+            
+            // Abrir WhatsApp
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensajeCodificado}`, '_blank');
+            
+            // Cerrar modal
+            cerrarModalPago();
+            
+            // Limpiar orden después de enviar
+            setTimeout(() => {
+                limpiarOrden();
+            }, 1000);
+        }
+
+        // ============================================
+        // FUNCIONES DEL CHAT
+        // ============================================
+        async function enviarMensaje() {
+            const input = document.getElementById('userInput');
+            const mensaje = input.value.trim();
+            if (!mensaje) return;
+
+            agregarMensajeChat(mensaje, 'user');
+            input.value = '';
+
+            try {
+                const response = await fetch(`${API_URL}/hablar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mensaje })
+                });
+                const data = await response.json();
+                agregarMensajeChat(data.mesero, 'bot');
+            } catch {
+                agregarMensajeChat('❌ Error de conexión', 'bot');
+            }
+        }
+
+        function agregarMensajeChat(texto, tipo) {
+            const chat = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${tipo}-message`;
+            msgDiv.textContent = texto;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') enviarMensaje();
+        }
+
+        // ============================================
+        // CONEXIÓN
+        // ============================================
+        async function verificarConexion() {
+            const status = document.getElementById('connectionStatus');
+            try {
+                await fetch(`${API_URL}/`);
+                status.className = 'connection-status connected';
+                status.innerHTML = '🟢 Conectado';
+            } catch {
+                status.className = 'connection-status disconnected';
+                status.innerHTML = '🔴 Desconectado';
+            }
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        cargarMenu();
+        verificarConexion();
+        setInterval(verificarConexion, 30000);
+    </script>
+</body>
+</html>
